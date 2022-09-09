@@ -1,0 +1,15 @@
+{% autoescape off %}
+
+NOTIFICATION!!!
+
+{% for down_site in down_sites %}
+
+The smarteye device at {{down_site.site}} has not logged data since {{down_site.time}}
+
+{% endfor %}
+
+Please escalate as appropriate
+
+Sincerely,
+The SmartEYE Team
+{% endautoescape %}

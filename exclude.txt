@@ -1,0 +1,7 @@
+exclude.txt
+ci-cd.sh
+deployment.sh
+.gitignore
+.env
+.env.production
+.env.staging

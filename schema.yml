@@ -1,0 +1,5614 @@
+openapi: 3.0.3
+info:
+  title: ''
+  version: 0.0.0
+paths:
+  /api/schema/:
+    get:
+      operationId: api_schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - th
+          - tr
+          - tt
+          - udm
+          - uk
+          - ur
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/v1/auth/login/:
+    post:
+      operationId: auth_login_create
+      description: Login logs a user into the system
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Login'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+          description: ''
+  /api/v1/auth/password_reset/:
+    post:
+      operationId: auth_password_reset_create
+      description: ''
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordChange'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordChange'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordChange'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: string
+          description: ''
+  /api/v1/auth/password_reset/request:
+    post:
+      operationId: auth_password_reset_request_create
+      description: ''
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: string
+          description: ''
+  /api/v1/auth/password_reset_confirm/{uid}/{token}:
+    get:
+      operationId: auth_password_reset_confirm_retrieve
+      description: ''
+      parameters:
+      - in: path
+        name: token
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: uid
+        schema:
+          type: integer
+        required: true
+      tags:
+      - auth
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordResetResponse'
+          description: ''
+  /api/v1/companies/:
+    get:
+      operationId: companies_list
+      description: |-
+        This view GETS all companies except those owned by E360.
+        Ideal way is to use query params to filter a single url.
+        But, sticking with this due to backwards compatibility with the frontend
+        Will change this once I am ready to refactor frontend
+      tags:
+      - companies
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Company'
+          description: ''
+    post:
+      operationId: companies_create
+      description: |-
+        This view GETS all companies except those owned by E360.
+        Ideal way is to use query params to filter a single url.
+        But, sticking with this due to backwards compatibility with the frontend
+        Will change this once I am ready to refactor frontend
+      tags:
+      - companies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Company'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Company'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Company'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+          description: ''
+  /api/v1/companies/{Company_id}:
+    get:
+      operationId: companies_retrieve
+      description: Retrieve, update or delete a Company instance.
+      parameters:
+      - in: path
+        name: Company_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this companies.
+        required: true
+      tags:
+      - companies
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+          description: ''
+    put:
+      operationId: companies_update
+      description: Retrieve, update or delete a Company instance.
+      parameters:
+      - in: path
+        name: Company_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this companies.
+        required: true
+      tags:
+      - companies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Company'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Company'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Company'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+          description: ''
+    patch:
+      operationId: companies_partial_update
+      description: Retrieve, update or delete a Company instance.
+      parameters:
+      - in: path
+        name: Company_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this companies.
+        required: true
+      tags:
+      - companies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCompany'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCompany'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCompany'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+          description: ''
+    delete:
+      operationId: companies_destroy
+      description: Retrieve, update or delete a Company instance.
+      parameters:
+      - in: path
+        name: Company_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this companies.
+        required: true
+      tags:
+      - companies
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/companies/{id}/toggle_activation/:
+    post:
+      operationId: companies_toggle_activation_create
+      description: |-
+        The chain of command goes like this:
+        Company -> User -> Sites -> Devices -> Tanks
+        Deactivation of company means:
+        - All users are deactivated
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - companies
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+          description: ''
+  /api/v1/companies/min/:
+    get:
+      operationId: companies_min_list
+      description: This view handles POST & GET requests for companies
+      tags:
+      - companies
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Company'
+          description: ''
+  /api/v1/consumption_rates_daily_trend/:
+    post:
+      operationId: consumption_rates_daily_trend_create
+      description: 'post: {''site_ids<LISTFormat>'', ''start<DateFormat>'', ''end<DateFormat>''}'
+      tags:
+      - consumption_rates_daily_trend
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EquipmentConsumptionResponse'
+          description: ''
+  /api/v1/data_logger/:
+    post:
+      operationId: data_logger_create
+      description: |-
+        Remote devices attempt to store multiple logs to the DB.
+        Also, there is a need to do some other processing on the
+        latest log for a particular tank asynchronously using celery.
+      tags:
+      - data_logger
+      responses:
+        '200':
+          description: No response body
+  /api/v1/devices/:
+    get:
+      operationId: devices_list
+      description: ''
+      tags:
+      - devices
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Device'
+          description: ''
+    post:
+      operationId: devices_create
+      description: ''
+      tags:
+      - devices
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Device'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Device'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Device'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+          description: ''
+  /api/v1/devices/{Device_id}:
+    get:
+      operationId: devices_retrieve
+      description: Retrieve, update or delete a Device instance.
+      parameters:
+      - in: path
+        name: Device_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this devices.
+        required: true
+      tags:
+      - devices
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+          description: ''
+    put:
+      operationId: devices_update
+      description: Retrieve, update or delete a Device instance.
+      parameters:
+      - in: path
+        name: Device_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this devices.
+        required: true
+      tags:
+      - devices
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Device'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Device'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Device'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+          description: ''
+    patch:
+      operationId: devices_partial_update
+      description: Retrieve, update or delete a Device instance.
+      parameters:
+      - in: path
+        name: Device_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this devices.
+        required: true
+      tags:
+      - devices
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDevice'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDevice'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDevice'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+          description: ''
+    delete:
+      operationId: devices_destroy
+      description: Retrieve, update or delete a Device instance.
+      parameters:
+      - in: path
+        name: Device_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this devices.
+        required: true
+      tags:
+      - devices
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/devices/{id}/company/{id}/activate/:
+    post:
+      operationId: devices_company_activate_create
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - devices
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviceActivationDetail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeviceActivationDetail'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DeviceActivationDetail'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+          description: ''
+  /api/v1/devices/adc_sensor_config/:
+    post:
+      operationId: devices_adc_sensor_config_create
+      description: ''
+      tags:
+      - devices
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ADCSensor'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ADCSensor'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ADCSensor'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/v1/devices/by_company/{id}:
+    get:
+      operationId: devices_by_company_list
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - devices
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Device'
+          description: ''
+  /api/v1/devices/min/:
+    get:
+      operationId: devices_min_list
+      description: ''
+      tags:
+      - devices
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Device'
+          description: ''
+  /api/v1/devices/registered/online_status/:
+    get:
+      operationId: devices_registered_online_status_retrieve
+      description: ''
+      tags:
+      - devices
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceRedisOnline'
+          description: ''
+  /api/v1/devices/remote_config/:
+    post:
+      operationId: devices_remote_config_create
+      description: ''
+      tags:
+      - devices
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ADCSensor'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ADCSensor'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ADCSensor'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TankDatails'
+          description: ''
+  /api/v1/devices/tank_config_details/:
+    post:
+      operationId: devices_tank_config_details_create
+      description: ''
+      tags:
+      - devices
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ADCSensor'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ADCSensor'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ADCSensor'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TankDatails'
+          description: ''
+  /api/v1/equipment_dashboard/:
+    post:
+      operationId: equipment_dashboard_create
+      description: |-
+        Get the following details:
+        - Online status (Extract the last log of the equipment)
+        - Totaliser hours
+      tags:
+      - equipment_dashboard
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EquipmentDashboardView'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EquipmentDashboardView'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EquipmentDashboardView'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EquipmentDashboardResponse'
+          description: ''
+  /api/v1/equipment_transaction_logs/:
+    post:
+      operationId: equipment_transaction_logs_create
+      description: 'post: {equipment_id, start, end}'
+      tags:
+      - equipment_transaction_logs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EquipmentLogs'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EquipmentLogs'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EquipmentLogs'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EquipmentLogsResponse'
+          description: ''
+  /api/v1/equipment_transaction_trends/:
+    post:
+      operationId: equipment_transaction_trends_create
+      description: 'post: {equipment_id, start, end}'
+      tags:
+      - equipment_transaction_trends
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EquipmentLogs'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EquipmentLogs'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EquipmentLogs'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EquipmentFlowmeterResponse'
+          description: ''
+  /api/v1/equipments/:
+    get:
+      operationId: equipments_list
+      description: ''
+      tags:
+      - equipments
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Equipment'
+          description: ''
+    post:
+      operationId: equipments_create
+      description: ''
+      tags:
+      - equipments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Equipment'
+          description: ''
+  /api/v1/equipments/{id}:
+    get:
+      operationId: equipments_retrieve
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - equipments
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Equipment'
+          description: ''
+    put:
+      operationId: equipments_update
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - equipments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Equipment'
+          description: ''
+    patch:
+      operationId: equipments_partial_update
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - equipments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedEquipment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedEquipment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedEquipment'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Equipment'
+          description: ''
+    delete:
+      operationId: equipments_destroy
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - equipments
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/equipments/{id}/eligible_tanks/:
+    get:
+      operationId: equipments_eligible_tanks_list
+      description: |-
+        Eligibke tanks for an equipment is defined as
+        all tanks belonging to the equipment's site and
+        containing the equipment's product
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - equipments
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tank'
+          description: ''
+  /api/v1/equipments/{id}/tanks/:
+    get:
+      operationId: equipments_tanks_retrieve
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - equipments
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Equipment'
+          description: ''
+  /api/v1/equipments/{id}/tanks/map:
+    put:
+      operationId: equipments_tanks_map_update
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - equipments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EquipmentMapTanks'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EquipmentMapTanks'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EquipmentMapTanks'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Equipment'
+          description: ''
+  /api/v1/equipments/by_company/{id}:
+    get:
+      operationId: equipments_by_company_list
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - equipments
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Equipment'
+          description: ''
+  /api/v1/equipments/by_site/{id}:
+    get:
+      operationId: equipments_by_site_list
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - equipments
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Equipment'
+          description: ''
+  /api/v1/equipments/by_sitegroup/:
+    post:
+      operationId: equipments_by_sitegroup_create
+      description: ''
+      tags:
+      - equipments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Equipment'
+          description: ''
+  /api/v1/firmware/devices/:
+    get:
+      operationId: firmware_devices_retrieve
+      description: ''
+      tags:
+      - firmware
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceData'
+          description: ''
+  /api/v1/firmware/update/:
+    post:
+      operationId: firmware_update_create
+      description: ''
+      tags:
+      - firmware
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviceFirmwareUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeviceFirmwareUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DeviceFirmwareUpdate'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: string
+          description: ''
+  /api/v1/flowmeter_test_transactions/:
+    post:
+      operationId: flowmeter_test_transactions_create
+      description: |-
+        post: {site_ids, start, end}
+        response: {data, error, code, status}
+      tags:
+      - flowmeter_test_transactions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Equipment'
+          description: ''
+  /api/v1/flowmeters/:
+    get:
+      operationId: flowmeters_list
+      description: ''
+      tags:
+      - flowmeters
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FlowMeter'
+          description: ''
+    post:
+      operationId: flowmeters_create
+      description: ''
+      tags:
+      - flowmeters
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FlowMeter'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FlowMeter'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FlowMeter'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowMeter'
+          description: ''
+  /api/v1/flowmeters/{id}:
+    get:
+      operationId: flowmeters_retrieve
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - flowmeters
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowMeter'
+          description: ''
+    put:
+      operationId: flowmeters_update
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - flowmeters
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FlowMeter'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FlowMeter'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FlowMeter'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowMeter'
+          description: ''
+    patch:
+      operationId: flowmeters_partial_update
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - flowmeters
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedFlowMeter'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedFlowMeter'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedFlowMeter'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowMeter'
+          description: ''
+    delete:
+      operationId: flowmeters_destroy
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - flowmeters
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/flowmeters/{id}/site/{id}/activate/:
+    post:
+      operationId: flowmeters_site_activate_create
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - flowmeters
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FlowmeterActivationDetail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FlowmeterActivationDetail'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FlowmeterActivationDetail'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowMeter'
+          description: ''
+  /api/v1/flowmeters/by_company/{id}:
+    get:
+      operationId: flowmeters_by_company_list
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - flowmeters
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FlowMeter'
+          description: ''
+  /api/v1/flowmeters/by_site/{id}:
+    get:
+      operationId: flowmeters_by_site_list
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - flowmeters
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FlowMeter'
+          description: ''
+  /api/v1/fm_logger/:
+    post:
+      operationId: fm_logger_create
+      description: ''
+      tags:
+      - fm_logger
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenLogger'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GenLogger'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/GenLogger'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenLogger'
+          description: ''
+  /api/v1/genhours_logger/:
+    post:
+      operationId: genhours_logger_create
+      description: ''
+      tags:
+      - genhours_logger
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenLogger'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GenLogger'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/GenLogger'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenLogger'
+          description: ''
+  /api/v1/hours_daily_trend/:
+    post:
+      operationId: hours_daily_trend_create
+      description: ''
+      tags:
+      - hours_daily_trend
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EquipmentConsumptionResponse'
+          description: ''
+  /api/v1/litres_consumed_daily_trend/:
+    post:
+      operationId: litres_consumed_daily_trend_create
+      description: ''
+      tags:
+      - litres_consumed_daily_trend
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EquipmentConsumptionResponse'
+          description: ''
+  /api/v1/litres_consumed_range/:
+    post:
+      operationId: litres_consumed_range_create
+      description: ''
+      tags:
+      - litres_consumed_range
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EquipmentConsumptionResponse'
+          description: ''
+  /api/v1/litres_consumed_report/:
+    post:
+      operationId: litres_consumed_report_create
+      description: ''
+      tags:
+      - litres_consumed_report
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EquipmentDashboardResponse'
+          description: ''
+  /api/v1/login/:
+    post:
+      operationId: login_create
+      description: Login logs a user into the system
+      tags:
+      - login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Login'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+          description: ''
+  /api/v1/maintenance_config/:
+    get:
+      operationId: maintenance_config_list
+      description: ''
+      tags:
+      - maintenance_config
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MaintenanceConfig'
+          description: ''
+    post:
+      operationId: maintenance_config_create
+      description: ''
+      tags:
+      - maintenance_config
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MaintenanceConfig'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MaintenanceConfig'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MaintenanceConfig'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaintenanceConfig'
+          description: ''
+  /api/v1/maintenance_config/{id}:
+    get:
+      operationId: maintenance_config_retrieve
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - maintenance_config
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaintenanceConfig'
+          description: ''
+    put:
+      operationId: maintenance_config_update
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - maintenance_config
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MaintenanceConfig'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MaintenanceConfig'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MaintenanceConfig'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaintenanceConfig'
+          description: ''
+    patch:
+      operationId: maintenance_config_partial_update
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - maintenance_config
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMaintenanceConfig'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMaintenanceConfig'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMaintenanceConfig'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaintenanceConfig'
+          description: ''
+  /api/v1/maintenance_info/:
+    post:
+      operationId: maintenance_info_create
+      description: ''
+      tags:
+      - maintenance_info
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MaintenanceInfo'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MaintenanceInfo'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MaintenanceInfo'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaintenanceInfo'
+          description: ''
+  /api/v1/maintenance_info_records/equipment/{id}:
+    get:
+      operationId: maintenance_info_records_equipment_retrieve
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - maintenance_info_records
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaintenanceInfoResponse'
+          description: ''
+  /api/v1/maintenance_summary/equipment/{id}:
+    get:
+      operationId: maintenance_summary_equipment_retrieve
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - maintenance_summary
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EquipmentMaintenanceSummary'
+          description: ''
+  /api/v1/new_transaction_comment/:
+    post:
+      operationId: new_transaction_comment_create
+      description: ''
+      tags:
+      - new_transaction_comment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionComment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TransactionComment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TransactionComment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionComment'
+          description: ''
+  /api/v1/password_reset/:
+    post:
+      operationId: password_reset_create
+      description: ''
+      tags:
+      - password_reset
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordChange'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordChange'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordChange'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: string
+          description: ''
+  /api/v1/password_reset/request:
+    post:
+      operationId: password_reset_request_create
+      description: ''
+      tags:
+      - password_reset
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: string
+          description: ''
+  /api/v1/password_reset_confirm/{uid}/{token}:
+    get:
+      operationId: password_reset_confirm_retrieve
+      description: ''
+      parameters:
+      - in: path
+        name: token
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: uid
+        schema:
+          type: integer
+        required: true
+      tags:
+      - password_reset_confirm
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordResetResponse'
+          description: ''
+  /api/v1/probe/{id}/:
+    get:
+      operationId: probe_retrieve
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - probe
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Probe'
+          description: ''
+    put:
+      operationId: probe_update
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - probe
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Probe'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Probe'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Probe'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Probe'
+          description: ''
+    patch:
+      operationId: probe_partial_update
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - probe
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProbe'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProbe'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProbe'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Probe'
+          description: ''
+    delete:
+      operationId: probe_destroy
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - probe
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/probe_chart/{id}/:
+    get:
+      operationId: probe_chart_retrieve
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - probe_chart
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProbeChartResponse'
+          description: ''
+  /api/v1/probes/:
+    get:
+      operationId: probes_list
+      description: ''
+      tags:
+      - probes
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Probe'
+          description: ''
+    post:
+      operationId: probes_create
+      description: ''
+      tags:
+      - probes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Probe'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Probe'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Probe'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Probe'
+          description: ''
+  /api/v1/public/tanks/deliveries/:
+    get:
+      operationId: public_tanks_deliveries_retrieve
+      description: ''
+      tags:
+      - public
+      responses:
+        '200':
+          description: No response body
+  /api/v1/public/tanks/inventory/:
+    get:
+      operationId: public_tanks_inventory_retrieve
+      description: ''
+      tags:
+      - public
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTankInventoryResponse'
+          description: ''
+  /api/v1/public/tanks/products/:
+    get:
+      operationId: public_tanks_products_retrieve
+      description: ''
+      tags:
+      - public
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTankProductResponse'
+          description: ''
+  /api/v1/public/tanks/reports/daily/:
+    get:
+      operationId: public_tanks_reports_daily_retrieve
+      description: ''
+      tags:
+      - public
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetDailyConsumptionResponse'
+          description: ''
+  /api/v1/public/token/{id}/:
+    get:
+      operationId: public_token_retrieve
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - public
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateAPITokenResponse'
+          description: ''
+  /api/v1/report/consumption/:
+    post:
+      operationId: report_consumption_create
+      description: ''
+      tags:
+      - report
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConsumptionReport'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ConsumptionReport'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ConsumptionReport'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsumptionResponse'
+          description: ''
+  /api/v1/report/delivery/:
+    post:
+      operationId: report_delivery_create
+      description: ''
+      tags:
+      - report
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/roles/:
+    get:
+      operationId: roles_list
+      description: ''
+      tags:
+      - roles
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Role'
+          description: ''
+  /api/v1/sensor_data_logger/:
+    post:
+      operationId: sensor_data_logger_create
+      description: ''
+      tags:
+      - sensor_data_logger
+      responses:
+        '200':
+          description: No response body
+  /api/v1/site/tanks/:
+    post:
+      operationId: site_tanks_create
+      description: ''
+      tags:
+      - site
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/sites/:
+    get:
+      operationId: sites_list
+      description: ''
+      tags:
+      - sites
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Site'
+          description: ''
+    post:
+      operationId: sites_create
+      description: ''
+      tags:
+      - sites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Site'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Site'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Site'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Site'
+          description: ''
+  /api/v1/sites/{Site_id}:
+    get:
+      operationId: sites_retrieve
+      description: Retrieve, update or delete a site instance.
+      parameters:
+      - in: path
+        name: Site_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this sites.
+        required: true
+      tags:
+      - sites
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Site'
+          description: ''
+    put:
+      operationId: sites_update
+      description: Retrieve, update or delete a site instance.
+      parameters:
+      - in: path
+        name: Site_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this sites.
+        required: true
+      tags:
+      - sites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Site'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Site'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Site'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Site'
+          description: ''
+    patch:
+      operationId: sites_partial_update
+      description: Retrieve, update or delete a site instance.
+      parameters:
+      - in: path
+        name: Site_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this sites.
+        required: true
+      tags:
+      - sites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSite'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Site'
+          description: ''
+    delete:
+      operationId: sites_destroy
+      description: Retrieve, update or delete a site instance.
+      parameters:
+      - in: path
+        name: Site_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this sites.
+        required: true
+      tags:
+      - sites
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/sites/{id}/location_activation/:
+    post:
+      operationId: sites_location_activation_create
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - sites
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/sites/{id}/toggle_activation/:
+    post:
+      operationId: sites_toggle_activation_create
+      description: |-
+        Upon site deactivation,
+        deactivate all users for that site
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - sites
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/sites/by_company/{id}:
+    get:
+      operationId: sites_by_company_list
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - sites
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Site'
+          description: ''
+  /api/v1/sites/min/:
+    get:
+      operationId: sites_min_list
+      description: ''
+      tags:
+      - sites
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Site'
+          description: ''
+  /api/v1/stockreport/download/:
+    post:
+      operationId: stockreport_download_create
+      description: ''
+      tags:
+      - stockreport
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/tank/{id}/recent-logs/:
+    get:
+      operationId: tank_recent_logs_retrieve
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - tank
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/tankgroups/:
+    get:
+      operationId: tankgroups_list
+      description: ''
+      tags:
+      - tankgroups
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TankGroup'
+          description: ''
+    post:
+      operationId: tankgroups_create
+      description: ''
+      tags:
+      - tankgroups
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TankGroup'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TankGroup'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TankGroup'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TankGroup'
+          description: ''
+  /api/v1/tankgroups/{Group_id}/:
+    get:
+      operationId: tankgroups_retrieve
+      description: ''
+      parameters:
+      - in: path
+        name: Group_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this tank groups.
+        required: true
+      tags:
+      - tankgroups
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TankGroup'
+          description: ''
+    put:
+      operationId: tankgroups_update
+      description: ''
+      parameters:
+      - in: path
+        name: Group_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this tank groups.
+        required: true
+      tags:
+      - tankgroups
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TankGroup'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TankGroup'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TankGroup'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TankGroup'
+          description: ''
+    patch:
+      operationId: tankgroups_partial_update
+      description: ''
+      parameters:
+      - in: path
+        name: Group_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this tank groups.
+        required: true
+      tags:
+      - tankgroups
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTankGroup'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTankGroup'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTankGroup'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TankGroup'
+          description: ''
+    delete:
+      operationId: tankgroups_destroy
+      description: ''
+      parameters:
+      - in: path
+        name: Group_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this tank groups.
+        required: true
+      tags:
+      - tankgroups
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/tankgroups/{id}/eligible_tanks/:
+    get:
+      operationId: tankgroups_eligible_tanks_list
+      description: |-
+        Eligibke tanks for a tankgroup is defined as
+        all tanks belonging to the tankgroup's company and
+        containing the tankgroup's product
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - tankgroups
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tank'
+          description: ''
+  /api/v1/tankgroups/{Group_id}/tanks/:
+    get:
+      operationId: tankgroups_tanks_retrieve
+      description: ''
+      parameters:
+      - in: path
+        name: Group_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this tank groups.
+        required: true
+      tags:
+      - tankgroups
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TankGroupWithTank'
+          description: ''
+  /api/v1/tankgroups/{id}/tanks/map:
+    put:
+      operationId: tankgroups_tanks_map_update
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - tankgroups
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/tankgroups/by_company/{id}/:
+    get:
+      operationId: tankgroups_by_company_list
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - tankgroups
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TankGroup'
+          description: ''
+  /api/v1/tankgroups/min/:
+    get:
+      operationId: tankgroups_min_list
+      description: ''
+      tags:
+      - tankgroups
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TankGroup'
+          description: ''
+  /api/v1/tankgrouptanklogs/:
+    post:
+      operationId: tankgrouptanklogs_create
+      description: ''
+      tags:
+      - tankgrouptanklogs
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/tanklogs/:
+    post:
+      operationId: tanklogs_create
+      description: ''
+      tags:
+      - tanklogs
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/tankreading/latest/:
+    post:
+      operationId: tankreading_latest_create
+      description: ''
+      tags:
+      - tankreading
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/tankreading/tankgroup/latest/:
+    post:
+      operationId: tankreading_tankgroup_latest_create
+      description: ''
+      tags:
+      - tankreading
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/tanks/:
+    get:
+      operationId: tanks_list
+      description: ''
+      tags:
+      - tanks
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tank'
+          description: ''
+    post:
+      operationId: tanks_create
+      description: ''
+      tags:
+      - tanks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tank'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Tank'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Tank'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tank'
+          description: ''
+  /api/v1/tanks/{Tank_id}:
+    get:
+      operationId: tanks_retrieve
+      description: Retrieve, update or delete a Tank instance.
+      parameters:
+      - in: path
+        name: Tank_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this tanks.
+        required: true
+      tags:
+      - tanks
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tank'
+          description: ''
+    put:
+      operationId: tanks_update
+      description: Retrieve, update or delete a Tank instance.
+      parameters:
+      - in: path
+        name: Tank_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this tanks.
+        required: true
+      tags:
+      - tanks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tank'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Tank'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Tank'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tank'
+          description: ''
+    patch:
+      operationId: tanks_partial_update
+      description: Retrieve, update or delete a Tank instance.
+      parameters:
+      - in: path
+        name: Tank_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this tanks.
+        required: true
+      tags:
+      - tanks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTank'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTank'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTank'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tank'
+          description: ''
+    delete:
+      operationId: tanks_destroy
+      description: Retrieve, update or delete a Tank instance.
+      parameters:
+      - in: path
+        name: Tank_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this tanks.
+        required: true
+      tags:
+      - tanks
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/tanks/by_company/{id}:
+    get:
+      operationId: tanks_by_company_list
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - tanks
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tank'
+          description: ''
+  /api/v1/tanks/by_site/{id}:
+    get:
+      operationId: tanks_by_site_list
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - tanks
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tank'
+          description: ''
+  /api/v1/tanks/by_sitegroup/:
+    post:
+      operationId: tanks_by_sitegroup_create
+      description: ''
+      tags:
+      - tanks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tank'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Tank'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Tank'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tank'
+          description: ''
+  /api/v1/tanks/chart-template:
+    get:
+      operationId: tanks_chart_template_retrieve
+      description: ''
+      tags:
+      - tanks
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/tanks/chart/{id}:
+    get:
+      operationId: tanks_chart_retrieve
+      description: |-
+        Use caching with redis
+        - Try to get chart from redis
+        - If cache miss, retrieve chart from server and set in cache,
+        - If cache hit, retrieve chart from cache
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - tanks
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/tanks/min/:
+    get:
+      operationId: tanks_min_list
+      description: ''
+      tags:
+      - tanks
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tank'
+          description: ''
+  /api/v1/temp_sensor_data_logger/:
+    post:
+      operationId: temp_sensor_data_logger_create
+      description: ''
+      tags:
+      - temp_sensor_data_logger
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/total_hours_range/:
+    post:
+      operationId: total_hours_range_create
+      description: ''
+      tags:
+      - total_hours_range
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EquipmentConsumptionResponse'
+          description: ''
+  /api/v1/total_hours_report/:
+    post:
+      operationId: total_hours_report_create
+      description: ''
+      tags:
+      - total_hours_report
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Equipment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EquipmentDashboardResponse'
+          description: ''
+  /api/v1/transaction_comment/{id}:
+    put:
+      operationId: transaction_comment_update
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - transaction_comment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionComment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TransactionComment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TransactionComment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionComment'
+          description: ''
+    patch:
+      operationId: transaction_comment_partial_update
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - transaction_comment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTransactionComment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTransactionComment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTransactionComment'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionComment'
+          description: ''
+  /api/v1/trends/:
+    post:
+      operationId: trends_create
+      description: ''
+      tags:
+      - trends
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/user_roles/:
+    get:
+      operationId: user_roles_list
+      description: ''
+      tags:
+      - user_roles
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Role'
+          description: ''
+  /api/v1/users/:
+    get:
+      operationId: users_list
+      description: List all Users, or create a new user
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+          description: ''
+    post:
+      operationId: users_create
+      description: List all Users, or create a new user
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/v1/users/{id}:
+    get:
+      operationId: users_retrieve
+      description: Retrieve, update or delete a user instance.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: users_update
+      description: Retrieve, update or delete a user instance.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: users_partial_update
+      description: Retrieve, update or delete a user instance.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    delete:
+      operationId: users_destroy
+      description: Retrieve, update or delete a user instance.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/users/by_company/{id}:
+    get:
+      operationId: users_by_company_list
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+          description: ''
+  /api/v1/users/min/:
+    get:
+      operationId: users_min_list
+      description: ''
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+          description: ''
+  /api/v1/users/toggle_activation/{id}:
+    post:
+      operationId: users_toggle_activation_create
+      description: ''
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/versions/:
+    get:
+      operationId: versions_list
+      description: ''
+      tags:
+      - versions
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Version'
+          description: ''
+    post:
+      operationId: versions_create
+      description: ''
+      tags:
+      - versions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Version'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Version'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Version'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Version'
+          description: ''
+components:
+  schemas:
+    ADCSensor:
+      type: object
+      properties:
+        mac_address:
+          type: string
+      required:
+      - mac_address
+    BlankEnum:
+      enum:
+      - ''
+    Company:
+      type: object
+      properties:
+        Company_id:
+          type: integer
+          readOnly: true
+        Name:
+          type: string
+          maxLength: 100
+        Country:
+          type: string
+          maxLength: 100
+        State:
+          type: string
+          maxLength: 100
+        City:
+          type: string
+          maxLength: 100
+        Address:
+          type: string
+          maxLength: 100
+        number_of_sites:
+          type: string
+          readOnly: true
+        Company_type:
+          $ref: '#/components/schemas/CompanyTypeEnum'
+        Company_url:
+          type: string
+          nullable: true
+          maxLength: 100
+        Company_image:
+          type: string
+          format: uri
+          nullable: true
+        Notes:
+          type: string
+          nullable: true
+        Contact_person_name:
+          type: string
+          maxLength: 100
+        Contact_person_designation:
+          type: string
+          maxLength: 100
+        Contact_person_mail:
+          type: string
+          maxLength: 100
+        Contact_person_phone:
+          type: string
+          maxLength: 100
+        Created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Deleted_at:
+          type: string
+          format: date-time
+          nullable: true
+        Active:
+          type: boolean
+        Owned:
+          type: boolean
+        genhours_access:
+          type: boolean
+      required:
+      - Address
+      - City
+      - Company_id
+      - Company_type
+      - Contact_person_designation
+      - Contact_person_mail
+      - Contact_person_name
+      - Contact_person_phone
+      - Country
+      - Created_at
+      - Name
+      - State
+      - Updated_at
+      - number_of_sites
+    CompanyTypeEnum:
+      enum:
+      - Multinational
+      - Large
+      - Medium
+      - Small
+      type: string
+    ConsumptionReport:
+      type: object
+      properties:
+        tanks:
+          type: string
+        start:
+          type: string
+        end:
+          type: string
+        report_type:
+          type: string
+      required:
+      - end
+      - report_type
+      - start
+      - tanks
+    ConsumptionResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Tank'
+        error:
+          type: string
+        code:
+          type: integer
+        status:
+          type: string
+      required:
+      - code
+      - data
+      - error
+      - status
+    Device:
+      type: object
+      properties:
+        Device_id:
+          type: integer
+          readOnly: true
+        Name:
+          type: string
+          maxLength: 50
+        Device_unique_address:
+          type: string
+          maxLength: 50
+        Company:
+          allOf:
+          - $ref: '#/components/schemas/Company'
+          readOnly: true
+        Company_id:
+          type: integer
+          writeOnly: true
+        Site:
+          type: string
+          readOnly: true
+          default: ''
+        Phone_number:
+          type: string
+          maxLength: 50
+        Created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Deleted_at:
+          type: string
+          format: date-time
+          nullable: true
+        transmit_interval:
+          type: integer
+          maximum: 4294967295
+          format: int64
+          minimum: 0
+        available:
+          type: string
+          readOnly: true
+        Active:
+          type: boolean
+      required:
+      - Company
+      - Created_at
+      - Device_id
+      - Device_unique_address
+      - Name
+      - Site
+      - Updated_at
+      - available
+    DeviceActivationDetail:
+      type: object
+      properties:
+        action:
+          type: string
+      required:
+      - action
+    DeviceData:
+      type: object
+      properties:
+        Device_id:
+          type: integer
+          readOnly: true
+        Name:
+          type: string
+          maxLength: 50
+        Device_unique_address:
+          type: string
+          maxLength: 50
+        Phone_number:
+          type: string
+          maxLength: 50
+        Created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Deleted_at:
+          type: string
+          format: date-time
+          nullable: true
+        transmit_interval:
+          type: integer
+          maximum: 4294967295
+          format: int64
+          minimum: 0
+        available:
+          type: string
+          readOnly: true
+        Active:
+          type: boolean
+      required:
+      - Created_at
+      - Device_id
+      - Device_unique_address
+      - Name
+      - Updated_at
+      - available
+    DeviceFirmwareUpdate:
+      type: object
+      properties:
+        Device:
+          type: string
+        Version:
+          type: string
+      required:
+      - Device
+      - Version
+    DeviceRedisOnline:
+      type: object
+      properties:
+        Name:
+          type: string
+          maxLength: 50
+        Device_unique_address:
+          type: string
+          maxLength: 50
+        SiteID:
+          type: integer
+          readOnly: true
+        Site_Name:
+          type: string
+          default: ''
+        seen:
+          type: string
+          readOnly: true
+      required:
+      - Device_unique_address
+      - Name
+      - SiteID
+      - seen
+    DisplayUnitEnum:
+      enum:
+      - L
+      - T
+      - KG
+      - m
+      - mm
+      - cm
+      - m3
+      - gal
+      type: string
+    Equipment:
+      type: object
+      properties:
+        site_ids:
+          type: array
+          items: {}
+        start:
+          type: string
+        end:
+          type: string
+      required:
+      - end
+      - site_ids
+      - start
+    EquipmentConsumptionResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/EquipmentData'
+        error:
+          type: string
+        code:
+          type: integer
+        status:
+          type: string
+      required:
+      - code
+      - data
+      - error
+      - status
+    EquipmentDashboardData:
+      type: object
+      properties:
+        equipment:
+          type: string
+        site_name:
+          type: string
+        online_status:
+          type: boolean
+        totaliser_hours:
+          type: integer
+        last_updated_time:
+          type: string
+      required:
+      - equipment
+      - last_updated_time
+      - online_status
+      - site_name
+      - totaliser_hours
+    EquipmentDashboardResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/EquipmentDashboardData'
+        error:
+          type: string
+        code:
+          type: integer
+        status:
+          type: string
+      required:
+      - code
+      - data
+      - error
+      - status
+    EquipmentDashboardView:
+      type: object
+      properties:
+        site_ids:
+          type: array
+          items: {}
+      required:
+      - site_ids
+    EquipmentData:
+      type: object
+      properties:
+        equipments:
+          type: array
+          items: {}
+        dates:
+          type: array
+          items: {}
+        sources:
+          type: object
+          additionalProperties: {}
+      required:
+      - dates
+      - equipments
+      - sources
+    EquipmentFlowmeterResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items: {}
+        error:
+          type: string
+        code:
+          type: integer
+        status:
+          type: string
+      required:
+      - code
+      - data
+      - error
+      - status
+    EquipmentLogs:
+      type: object
+      properties:
+        equipment_id:
+          type: integer
+          writeOnly: true
+        start:
+          type: string
+        end:
+          type: string
+      required:
+      - end
+      - equipment_id
+      - start
+    EquipmentLogsResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/FlowmeterLogs'
+        error:
+          type: string
+        code:
+          type: integer
+        status:
+          type: string
+      required:
+      - code
+      - data
+      - error
+      - status
+    EquipmentMaintenanceData:
+      type: object
+      properties:
+        equipment:
+          type: string
+        maintenance_mode:
+          type: string
+        latest_maintenance_genhours:
+          type: integer
+        next_maintenance_date:
+          type: string
+          format: date
+        next_maintenance_genhours:
+          type: integer
+      required:
+      - equipment
+      - latest_maintenance_genhours
+      - maintenance_mode
+      - next_maintenance_date
+      - next_maintenance_genhours
+    EquipmentMaintenanceSummary:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/EquipmentMaintenanceData'
+        error:
+          type: string
+        code:
+          type: integer
+        status:
+          type: string
+      required:
+      - code
+      - data
+      - error
+      - status
+    EquipmentMapTanks:
+      type: object
+      properties:
+        Tank:
+          type: string
+      required:
+      - Tank
+    EquipmentTypeEnum:
+      enum:
+      - GEN
+      - BLR
+      - VEH
+      type: string
+    FlowMeter:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        site:
+          allOf:
+          - $ref: '#/components/schemas/SiteSerializerWithOnlyName'
+          readOnly: true
+        site_id:
+          type: integer
+          writeOnly: true
+          nullable: true
+        available:
+          type: boolean
+          readOnly: true
+        serial_number:
+          type: string
+          maxLength: 200
+        max_temp:
+          type: number
+          format: float
+          nullable: true
+        meter_type:
+          $ref: '#/components/schemas/MeterTypeEnum'
+        address:
+          type: integer
+          maximum: 4294967295
+          format: int64
+          minimum: 0
+        active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - address
+      - available
+      - created_at
+      - id
+      - serial_number
+      - site
+      - site_id
+    FlowMeterSerializerWithName:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        serial_number:
+          type: string
+          maxLength: 200
+    FlowmeterActivationDetail:
+      type: object
+      properties:
+        action:
+          type: string
+      required:
+      - action
+    FlowmeterLogs:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        mac_address:
+          type: string
+          maxLength: 50
+        flowmeter_address:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        litres:
+          type: number
+          format: float
+        hours:
+          type: number
+          format: float
+        forward_litres:
+          type: number
+          format: float
+        backward_litres:
+          type: number
+          format: float
+        forward_fuel_rate:
+          type: number
+          format: float
+        backward_fuel_rate:
+          type: number
+          format: float
+        consumption_rate:
+          type: number
+          format: float
+        temperature:
+          type: number
+          format: float
+        status:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        mode:
+          type: string
+          maxLength: 50
+        timestamp:
+          type: string
+          format: date-time
+        db_fill_time:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - backward_fuel_rate
+      - backward_litres
+      - consumption_rate
+      - db_fill_time
+      - flowmeter_address
+      - forward_fuel_rate
+      - forward_litres
+      - hours
+      - id
+      - litres
+      - mac_address
+      - mode
+      - status
+      - temperature
+      - timestamp
+    GenLogger:
+      type: object
+      properties:
+        gen_hour_logs:
+          type: string
+      required:
+      - gen_hour_logs
+    GenerateAPITokenResponse:
+      type: object
+      properties:
+        data:
+          type: string
+        error:
+          type: string
+        code:
+          type: integer
+        status:
+          type: string
+      required:
+      - code
+      - data
+      - error
+      - status
+    GetDailyConsumptionResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Tank'
+        error:
+          type: string
+        code:
+          type: integer
+        status:
+          type: string
+      required:
+      - code
+      - data
+      - error
+      - status
+    GetTankData:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        local_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        multicont_polling_address:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        device_address:
+          type: string
+          nullable: true
+          maxLength: 50
+        pv:
+          type: string
+          nullable: true
+          maxLength: 50
+        pv_flag:
+          type: string
+          nullable: true
+          maxLength: 50
+        tank_index:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        sv:
+          type: string
+          nullable: true
+          maxLength: 50
+        read_at:
+          type: string
+          nullable: true
+          maxLength: 50
+        db_fill_time:
+          type: string
+          format: date-time
+          readOnly: true
+        controller_type:
+          type: string
+          nullable: true
+          maxLength: 50
+        temperature:
+          type: string
+          nullable: true
+          maxLength: 50
+        water:
+          type: string
+          nullable: true
+          maxLength: 50
+        tc_volume:
+          type: string
+          nullable: true
+          maxLength: 50
+      required:
+      - db_fill_time
+      - id
+    GetTankInventoryResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/GetTankData'
+        error:
+          type: string
+        code:
+          type: integer
+        status:
+          type: string
+      required:
+      - code
+      - data
+      - error
+      - status
+    GetTankProductResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/TankSite'
+        error:
+          type: string
+        code:
+          type: integer
+        status:
+          type: string
+      required:
+      - code
+      - data
+      - error
+      - status
+    LitresConsumedSourceEnum:
+      enum:
+      - TL
+      - FM
+      - HYB-TL
+      - HYB-FM
+      type: string
+    Login:
+      type: object
+      description: |-
+        DRF simple-jwt does not update user last login after getting a new token.
+        Fix is to subclass the TokenObtainPairSerializer and add the user_id to the
+        serializer response data
+      properties:
+        Email:
+          type: string
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - Email
+      - password
+    LoginResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        token:
+          type: string
+      required:
+      - token
+      - user
+    MaintenanceConfig:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        equipment:
+          allOf:
+          - $ref: '#/components/schemas/Equipment'
+          readOnly: true
+        equipment_id:
+          type: integer
+          writeOnly: true
+        mode:
+          $ref: '#/components/schemas/ModeEnum'
+        hours:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        days:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        scheduled_days:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+      required:
+      - equipment
+      - equipment_id
+      - id
+      - mode
+    MaintenanceInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        equipment:
+          allOf:
+          - $ref: '#/components/schemas/Equipment'
+          readOnly: true
+        equipment_id:
+          type: integer
+          writeOnly: true
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/MaintenanceInfoImage'
+          readOnly: true
+        maintenance_date:
+          type: string
+          format: date
+        notes:
+          type: string
+        genhours:
+          type: number
+          format: float
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - equipment
+      - equipment_id
+      - genhours
+      - id
+      - images
+      - maintenance_date
+    MaintenanceInfoImage:
+      type: object
+      properties:
+        image:
+          type: string
+          format: uri
+      required:
+      - image
+    MaintenanceInfoResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/MaintenanceInfo'
+        error:
+          type: string
+        code:
+          type: integer
+        status:
+          type: string
+      required:
+      - code
+      - data
+      - error
+      - status
+    MeterTypeEnum:
+      enum:
+      - DFM
+      - PUL
+      type: string
+    ModeEnum:
+      enum:
+      - HR/D
+      - SCH
+      type: string
+    PasswordChange:
+      type: object
+      description: PasswordChangeSerializer to enable serializer on drf-spectacular
+      properties:
+        user_id:
+          type: integer
+        token:
+          type: string
+        password:
+          type: string
+      required:
+      - password
+      - token
+      - user_id
+    PasswordResetRequest:
+      type: object
+      properties:
+        Email:
+          type: string
+      required:
+      - Email
+    PasswordResetResponse:
+      type: object
+      properties:
+        user_id:
+          type: integer
+        message:
+          type: string
+      required:
+      - message
+      - user_id
+    PatchedCompany:
+      type: object
+      properties:
+        Company_id:
+          type: integer
+          readOnly: true
+        Name:
+          type: string
+          maxLength: 100
+        Country:
+          type: string
+          maxLength: 100
+        State:
+          type: string
+          maxLength: 100
+        City:
+          type: string
+          maxLength: 100
+        Address:
+          type: string
+          maxLength: 100
+        number_of_sites:
+          type: string
+          readOnly: true
+        Company_type:
+          $ref: '#/components/schemas/CompanyTypeEnum'
+        Company_url:
+          type: string
+          nullable: true
+          maxLength: 100
+        Company_image:
+          type: string
+          format: uri
+          nullable: true
+        Notes:
+          type: string
+          nullable: true
+        Contact_person_name:
+          type: string
+          maxLength: 100
+        Contact_person_designation:
+          type: string
+          maxLength: 100
+        Contact_person_mail:
+          type: string
+          maxLength: 100
+        Contact_person_phone:
+          type: string
+          maxLength: 100
+        Created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Deleted_at:
+          type: string
+          format: date-time
+          nullable: true
+        Active:
+          type: boolean
+        Owned:
+          type: boolean
+        genhours_access:
+          type: boolean
+    PatchedDevice:
+      type: object
+      properties:
+        Device_id:
+          type: integer
+          readOnly: true
+        Name:
+          type: string
+          maxLength: 50
+        Device_unique_address:
+          type: string
+          maxLength: 50
+        Company:
+          allOf:
+          - $ref: '#/components/schemas/Company'
+          readOnly: true
+        Company_id:
+          type: integer
+          writeOnly: true
+        Site:
+          type: string
+          readOnly: true
+          default: ''
+        Phone_number:
+          type: string
+          maxLength: 50
+        Created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Deleted_at:
+          type: string
+          format: date-time
+          nullable: true
+        transmit_interval:
+          type: integer
+          maximum: 4294967295
+          format: int64
+          minimum: 0
+        available:
+          type: string
+          readOnly: true
+        Active:
+          type: boolean
+    PatchedEquipment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        site:
+          allOf:
+          - $ref: '#/components/schemas/SiteSerializerWithOnlyName'
+          readOnly: true
+        site_id:
+          type: integer
+          writeOnly: true
+        flowmeter:
+          allOf:
+          - $ref: '#/components/schemas/FlowMeterSerializerWithName'
+          readOnly: true
+        flowmeter_id:
+          type: integer
+          writeOnly: true
+          nullable: true
+        tank_connection_status:
+          type: boolean
+          readOnly: true
+        name:
+          type: string
+          maxLength: 50
+        equipment_type:
+          $ref: '#/components/schemas/EquipmentTypeEnum'
+        oem:
+          type: string
+          maxLength: 200
+        model:
+          type: string
+          maxLength: 200
+        oem_consumption_rate:
+          type: number
+          format: float
+          nullable: true
+        nominal_consumption_rate:
+          type: number
+          format: float
+          nullable: true
+        max_consumption_rate:
+          type: number
+          format: float
+          nullable: true
+        min_consumption_rate:
+          type: number
+          format: float
+          nullable: true
+        notes:
+          type: string
+        initial_totaliser_hours:
+          type: integer
+          maximum: 4294967295
+          format: int64
+          minimum: 0
+        totaliser_hours:
+          type: integer
+          readOnly: true
+        last_genhours_calculated_time:
+          type: string
+          format: date-time
+          readOnly: true
+        running_hours_source:
+          $ref: '#/components/schemas/RunningHoursSourceEnum'
+        litres_consumed_source:
+          $ref: '#/components/schemas/LitresConsumedSourceEnum'
+        address:
+          type: integer
+          maximum: 3
+          minimum: 1
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        active:
+          type: boolean
+        product:
+          type: integer
+          nullable: true
+        source_tanks:
+          type: array
+          items:
+            type: integer
+    PatchedFlowMeter:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        site:
+          allOf:
+          - $ref: '#/components/schemas/SiteSerializerWithOnlyName'
+          readOnly: true
+        site_id:
+          type: integer
+          writeOnly: true
+          nullable: true
+        available:
+          type: boolean
+          readOnly: true
+        serial_number:
+          type: string
+          maxLength: 200
+        max_temp:
+          type: number
+          format: float
+          nullable: true
+        meter_type:
+          $ref: '#/components/schemas/MeterTypeEnum'
+        address:
+          type: integer
+          maximum: 4294967295
+          format: int64
+          minimum: 0
+        active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedMaintenanceConfig:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        equipment:
+          allOf:
+          - $ref: '#/components/schemas/Equipment'
+          readOnly: true
+        equipment_id:
+          type: integer
+          writeOnly: true
+        mode:
+          $ref: '#/components/schemas/ModeEnum'
+        hours:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        days:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        scheduled_days:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+    PatchedProbe:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 50
+        slug:
+          type: string
+          maxLength: 50
+        probe_chart:
+          type: string
+          format: uri
+          nullable: true
+    PatchedSite:
+      type: object
+      description: Validate Device id
+      properties:
+        Company_id:
+          type: integer
+          writeOnly: true
+        Company:
+          allOf:
+          - $ref: '#/components/schemas/Company'
+          readOnly: true
+        Device_id:
+          type: integer
+          writeOnly: true
+          nullable: true
+        Device:
+          allOf:
+          - $ref: '#/components/schemas/Device'
+          readOnly: true
+        Site_id:
+          type: integer
+          readOnly: true
+        Name:
+          type: string
+          maxLength: 100
+        Country:
+          type: string
+          maxLength: 50
+        State:
+          type: string
+          maxLength: 100
+        City:
+          type: string
+          maxLength: 100
+        Address:
+          type: string
+          maxLength: 100
+        Latitude:
+          type: string
+          maxLength: 100
+        Longitude:
+          type: string
+          maxLength: 100
+        Location_status:
+          type: boolean
+        Site_type:
+          oneOf:
+          - $ref: '#/components/schemas/SiteTypeEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+        Notes:
+          type: string
+        SIM_provided_details:
+          type: string
+          maxLength: 50
+        Number_of_tanks:
+          type: integer
+          maximum: 65535
+          minimum: 1
+        tank_count:
+          type: integer
+          readOnly: true
+        Reorder_mail:
+          type: string
+          nullable: true
+        Critical_level_mail:
+          type: string
+          nullable: true
+        Contact_person_name:
+          type: string
+          maxLength: 100
+        Contact_person_designation:
+          type: string
+          maxLength: 100
+        Contact_person_mail:
+          type: string
+          maxLength: 100
+        Contact_person_phone:
+          type: string
+          maxLength: 100
+        Created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Active:
+          type: boolean
+        Email_Notification:
+          type: boolean
+    PatchedTank:
+      type: object
+      properties:
+        Tank_id:
+          type: integer
+          readOnly: true
+        Site:
+          allOf:
+          - $ref: '#/components/schemas/Site'
+          readOnly: true
+        Site_id:
+          type: integer
+          writeOnly: true
+        Name:
+          type: string
+          nullable: true
+          maxLength: 50
+        Control_mode:
+          type: string
+          maxLength: 50
+        Tank_controller:
+          type: string
+          maxLength: 50
+        Controller_polling_address:
+          type: integer
+          maximum: 3
+          minimum: 1
+        Tank_index:
+          type: integer
+          maximum: 8
+          minimum: 1
+        Capacity:
+          type: integer
+          maximum: 4294967295
+          format: int64
+          minimum: 0
+        UOM:
+          $ref: '#/components/schemas/UOMEnum'
+        Shape:
+          $ref: '#/components/schemas/ShapeEnum'
+        LL_Level:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        L_Level:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        HH_Level:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        H_Level:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        Reorder:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        Leak:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        Created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Deleted_at:
+          type: string
+          format: date-time
+          nullable: true
+        Status:
+          type: boolean
+        CalibrationChart:
+          type: string
+          format: uri
+          nullable: true
+        Offset:
+          type: number
+          format: float
+          nullable: true
+        Po4:
+          type: number
+          format: float
+          nullable: true
+        Display_unit:
+          oneOf:
+          - $ref: '#/components/schemas/DisplayUnitEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+        Product:
+          type: integer
+          nullable: true
+    PatchedTankGroup:
+      type: object
+      properties:
+        Group_id:
+          type: integer
+          readOnly: true
+        Name:
+          type: string
+          maxLength: 50
+        Product:
+          type: integer
+          nullable: true
+        Company:
+          type: integer
+        UOM:
+          $ref: '#/components/schemas/UOMEnum'
+        current_capacity:
+          type: string
+          readOnly: true
+        tank_count:
+          type: string
+          readOnly: true
+        Reorder_Level:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        Alarm_LL_Level:
+          type: string
+          readOnly: true
+        Alarm_HH_Level:
+          type: string
+          readOnly: true
+        Critical_level_mail:
+          type: string
+          nullable: true
+        Reorder_mail:
+          type: string
+          nullable: true
+        Notes:
+          type: string
+        Created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Deleted_at:
+          type: string
+          format: date-time
+          nullable: true
+        Status:
+          type: boolean
+    PatchedTransactionComment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        trx_end_time:
+          type: string
+          maxLength: 50
+        comment:
+          type: string
+        comment_create_author:
+          type: string
+          maxLength: 50
+        comment_create_time:
+          type: string
+          format: date-time
+          readOnly: true
+        comment_edit_author:
+          type: string
+          maxLength: 50
+        comment_edit_time:
+          type: string
+          format: date-time
+          readOnly: true
+        equipment:
+          type: integer
+    PatchedUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        Company:
+          allOf:
+          - $ref: '#/components/schemas/Company'
+          readOnly: true
+        Role:
+          allOf:
+          - $ref: '#/components/schemas/Role'
+          readOnly: true
+        Sites:
+          type: array
+          items:
+            $ref: '#/components/schemas/Site'
+          readOnly: true
+        Role_id:
+          type: integer
+          writeOnly: true
+        Company_id:
+          type: integer
+          writeOnly: true
+        Site_id:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        last_login:
+          type: string
+          format: date-time
+          nullable: true
+        Name:
+          type: string
+          maxLength: 50
+        Email:
+          type: string
+          format: email
+          maxLength: 254
+        Phone_number:
+          type: string
+          maxLength: 25
+        Created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Deleted_at:
+          type: string
+          format: date-time
+          nullable: true
+        Status:
+          oneOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+        is_active:
+          type: boolean
+    Probe:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 50
+        slug:
+          type: string
+          maxLength: 50
+        probe_chart:
+          type: string
+          format: uri
+          nullable: true
+      required:
+      - id
+      - name
+      - slug
+    ProbeChartResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          additionalProperties: {}
+      required:
+      - data
+    Role:
+      type: object
+      properties:
+        Role_id:
+          type: integer
+          readOnly: true
+        Name:
+          type: string
+          maxLength: 50
+      required:
+      - Name
+      - Role_id
+    RunningHoursSourceEnum:
+      enum:
+      - FM
+      - DI
+      - HYB-FM
+      - HYB-DI
+      type: string
+    ShapeEnum:
+      enum:
+      - LC
+      - SC
+      - LR
+      - SR
+      - SRV
+      type: string
+    Site:
+      type: object
+      description: Validate Device id
+      properties:
+        Company_id:
+          type: integer
+          writeOnly: true
+        Company:
+          allOf:
+          - $ref: '#/components/schemas/Company'
+          readOnly: true
+        Device_id:
+          type: integer
+          writeOnly: true
+          nullable: true
+        Device:
+          allOf:
+          - $ref: '#/components/schemas/Device'
+          readOnly: true
+        Site_id:
+          type: integer
+          readOnly: true
+        Name:
+          type: string
+          maxLength: 100
+        Country:
+          type: string
+          maxLength: 50
+        State:
+          type: string
+          maxLength: 100
+        City:
+          type: string
+          maxLength: 100
+        Address:
+          type: string
+          maxLength: 100
+        Latitude:
+          type: string
+          maxLength: 100
+        Longitude:
+          type: string
+          maxLength: 100
+        Location_status:
+          type: boolean
+        Site_type:
+          oneOf:
+          - $ref: '#/components/schemas/SiteTypeEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+        Notes:
+          type: string
+        SIM_provided_details:
+          type: string
+          maxLength: 50
+        Number_of_tanks:
+          type: integer
+          maximum: 65535
+          minimum: 1
+        tank_count:
+          type: integer
+          readOnly: true
+        Reorder_mail:
+          type: string
+          nullable: true
+        Critical_level_mail:
+          type: string
+          nullable: true
+        Contact_person_name:
+          type: string
+          maxLength: 100
+        Contact_person_designation:
+          type: string
+          maxLength: 100
+        Contact_person_mail:
+          type: string
+          maxLength: 100
+        Contact_person_phone:
+          type: string
+          maxLength: 100
+        Created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Active:
+          type: boolean
+        Email_Notification:
+          type: boolean
+      required:
+      - Address
+      - City
+      - Company
+      - Company_id
+      - Country
+      - Created_at
+      - Device
+      - Device_id
+      - Name
+      - Number_of_tanks
+      - Site_id
+      - Site_type
+      - State
+      - Updated_at
+      - tank_count
+    SiteSerializerWithOnlyName:
+      type: object
+      properties:
+        Site_id:
+          type: integer
+          readOnly: true
+        Name:
+          type: string
+          maxLength: 100
+        Company:
+          type: string
+    SiteTypeEnum:
+      enum:
+      - Industrial
+      - Logistics
+      - Banking
+      - Agricultural
+      - Education
+      - Hospitality
+      - Mining
+      - Military
+      - Manufacturing
+      - Marine
+      - Downstream
+      - Upstream
+      - Aviation
+      - Corporate
+      - Real Estate
+      type: string
+    StatusEnum:
+      enum:
+      - 1
+      type: integer
+    Tank:
+      type: object
+      properties:
+        Tank_id:
+          type: integer
+          readOnly: true
+        Site:
+          allOf:
+          - $ref: '#/components/schemas/Site'
+          readOnly: true
+        Site_id:
+          type: integer
+          writeOnly: true
+        Name:
+          type: string
+          nullable: true
+          maxLength: 50
+        Control_mode:
+          type: string
+          maxLength: 50
+        Tank_controller:
+          type: string
+          maxLength: 50
+        Controller_polling_address:
+          type: integer
+          maximum: 3
+          minimum: 1
+        Tank_index:
+          type: integer
+          maximum: 8
+          minimum: 1
+        Capacity:
+          type: integer
+          maximum: 4294967295
+          format: int64
+          minimum: 0
+        UOM:
+          $ref: '#/components/schemas/UOMEnum'
+        Shape:
+          $ref: '#/components/schemas/ShapeEnum'
+        LL_Level:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        L_Level:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        HH_Level:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        H_Level:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        Reorder:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        Leak:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        Created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Deleted_at:
+          type: string
+          format: date-time
+          nullable: true
+        Status:
+          type: boolean
+        CalibrationChart:
+          type: string
+          format: uri
+          nullable: true
+        Offset:
+          type: number
+          format: float
+          nullable: true
+        Po4:
+          type: number
+          format: float
+          nullable: true
+        Display_unit:
+          oneOf:
+          - $ref: '#/components/schemas/DisplayUnitEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+        Product:
+          type: integer
+          nullable: true
+      required:
+      - Capacity
+      - Controller_polling_address
+      - Created_at
+      - Site
+      - Site_id
+      - Tank_id
+      - Tank_index
+      - Updated_at
+    TankDatails:
+      type: object
+      properties:
+        Name:
+          type: string
+        Tank_controller:
+          type: string
+        Controller_polling_address:
+          type: integer
+        Tank_index:
+          type: string
+        Control_mode:
+          type: string
+      required:
+      - Control_mode
+      - Controller_polling_address
+      - Name
+      - Tank_controller
+      - Tank_index
+    TankGroup:
+      type: object
+      properties:
+        Group_id:
+          type: integer
+          readOnly: true
+        Name:
+          type: string
+          maxLength: 50
+        Product:
+          type: integer
+          nullable: true
+        Company:
+          type: integer
+        UOM:
+          $ref: '#/components/schemas/UOMEnum'
+        current_capacity:
+          type: string
+          readOnly: true
+        tank_count:
+          type: string
+          readOnly: true
+        Reorder_Level:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        Alarm_LL_Level:
+          type: string
+          readOnly: true
+        Alarm_HH_Level:
+          type: string
+          readOnly: true
+        Critical_level_mail:
+          type: string
+          nullable: true
+        Reorder_mail:
+          type: string
+          nullable: true
+        Notes:
+          type: string
+        Created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Deleted_at:
+          type: string
+          format: date-time
+          nullable: true
+        Status:
+          type: boolean
+      required:
+      - Alarm_HH_Level
+      - Alarm_LL_Level
+      - Company
+      - Created_at
+      - Group_id
+      - Name
+      - UOM
+      - Updated_at
+      - current_capacity
+      - tank_count
+    TankGroupWithTank:
+      type: object
+      properties:
+        Group_id:
+          type: integer
+          readOnly: true
+        Name:
+          type: string
+          maxLength: 50
+        Product:
+          type: integer
+          nullable: true
+        Company:
+          type: integer
+        UOM:
+          $ref: '#/components/schemas/UOMEnum'
+        Tanks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tank'
+          readOnly: true
+        current_capacity:
+          type: string
+          readOnly: true
+        tank_count:
+          type: string
+          readOnly: true
+        Reorder_Level:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        Alarm_LL_Level:
+          type: string
+          readOnly: true
+        Alarm_HH_Level:
+          type: string
+          readOnly: true
+        Critical_level_mail:
+          type: string
+          nullable: true
+        Reorder_mail:
+          type: string
+          nullable: true
+        Notes:
+          type: string
+        Created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Deleted_at:
+          type: string
+          format: date-time
+          nullable: true
+        Status:
+          type: boolean
+      required:
+      - Alarm_HH_Level
+      - Alarm_LL_Level
+      - Company
+      - Created_at
+      - Group_id
+      - Name
+      - Tanks
+      - UOM
+      - Updated_at
+      - current_capacity
+      - tank_count
+    TankSite:
+      type: object
+      properties:
+        Tank_id:
+          type: integer
+          readOnly: true
+      required:
+      - Tank_id
+    TransactionComment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        trx_end_time:
+          type: string
+          maxLength: 50
+        comment:
+          type: string
+        comment_create_author:
+          type: string
+          maxLength: 50
+        comment_create_time:
+          type: string
+          format: date-time
+          readOnly: true
+        comment_edit_author:
+          type: string
+          maxLength: 50
+        comment_edit_time:
+          type: string
+          format: date-time
+          readOnly: true
+        equipment:
+          type: integer
+      required:
+      - comment_create_author
+      - comment_create_time
+      - comment_edit_time
+      - equipment
+      - id
+      - trx_end_time
+    UOMEnum:
+      enum:
+      - L
+      - T
+      - KG
+      - m
+      - mm
+      - cm
+      - m3
+      - gal
+      type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        Company:
+          allOf:
+          - $ref: '#/components/schemas/Company'
+          readOnly: true
+        Role:
+          allOf:
+          - $ref: '#/components/schemas/Role'
+          readOnly: true
+        Sites:
+          type: array
+          items:
+            $ref: '#/components/schemas/Site'
+          readOnly: true
+        Role_id:
+          type: integer
+          writeOnly: true
+        Company_id:
+          type: integer
+          writeOnly: true
+        Site_id:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        last_login:
+          type: string
+          format: date-time
+          nullable: true
+        Name:
+          type: string
+          maxLength: 50
+        Email:
+          type: string
+          format: email
+          maxLength: 254
+        Phone_number:
+          type: string
+          maxLength: 25
+        Created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        Deleted_at:
+          type: string
+          format: date-time
+          nullable: true
+        Status:
+          oneOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+        is_active:
+          type: boolean
+      required:
+      - Company
+      - Company_id
+      - Created_at
+      - Email
+      - Name
+      - Phone_number
+      - Role
+      - Role_id
+      - Sites
+      - Updated_at
+      - id
+    Version:
+      type: object
+      properties:
+        Version_id:
+          type: integer
+          readOnly: true
+        Version_number:
+          type: string
+          maxLength: 50
+        Download_link:
+          type: string
+        Filename:
+          type: string
+          maxLength: 50
+        Created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - Created_at
+      - Download_link
+      - Filename
+      - Version_id
+      - Version_number
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Bearer
