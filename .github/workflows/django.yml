@@ -2,29 +2,79 @@ name: Django CI
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    branches: [ staging ]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: [3.7, 3.8, 3.9]
-
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: test_database
+          MYSQL_USER: dotun
+          MYSQL_PASSWORD: password
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+          
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.6
+      uses: actions/setup-python@v2
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: 3.6
+        
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Run Tests
       run: |
         python manage.py test
+        
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.ACCESSKEYID }}
+        aws-secret-access-key: ${{ secrets.SECRETACCESSKEY }}
+        aws-region: us-east-2
+        
+    - name: Set the value
+      id: step_one
+      run: echo "serverip=$(aws ec2 describe-instances --filters 'Name=tag:Name,Values=smart-eye-api' --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)" >> $GITHUB_ENV
+
+    - name: Use the value
+      id: step_two
+      run: echo "${{ env.serverip }}" 
+      
+    - name: deployment
+      run: |
+        chmod 400 key.pem
+        zip -r ../smart-eye-api.zip ../smart-eye-api
+        scp -o StrictHostKeyChecking=no -i key.pem -r ../smart-eye-api.zip ec2-user@${{ env.serverip }}:/home/ec2-user
+        
+    - name: Run Commands via SSH
+      uses: Flaavius/ssh-commands@1.0
+
+      with:
+        command: ./smart-eye-api
+        #host: ${{ secrets.SERVERIP }}
+        host: ${{ env.serverip }}
+        username: ${{ secrets.USERNAME }}
+        port: 22
+        privateKey: ${{ secrets.PEMKEY }}
